@@ -5,6 +5,7 @@
 alias zsrc="source \$HOME/.zshrc"       # shortcut to source .zshrc
 alias zshrc="code \$HOME/.zshrc"        # shortcut to edit .zshrc
 alias dotfiles="code \$HOME/.dotfiles"  # shortcut to open dotfiles in vscode
+alias ls="ls --color=auto"
 
 # setup root path
 # please note: order matters here!
