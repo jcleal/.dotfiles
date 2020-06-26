@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# generic envvironment config
+
+# aliases
+alias zsrc="source \$HOME/.zshrc"       # shortcut to source .zshrc
+alias zshrc="code \$HOME/.zshrc"        # shortcut to edit .zshrc
+alias dotfiles="code \$HOME/.dotfiles"  # shortcut to open dotfiles in vscode
+
+# setup root path
+# please note: order matters here!
+root="$HOME/.local"
+
+# setup dirs
+dirs=(
+   "$root"
+   "$root/go"
+   "$root/bin"
+   "$root/projects"
+)
+for dir in "${dirs[@]}"; do
+    if [[ ! -d "$dir" ]]; then
+        mkdir "$dir" \
+            || { echo "failed to create $dir"; exit 1; }
+    fi
+done
+
+# update PATH with dirs
+p=$(printf ":%s" "${dirs[@]}")  # add dirs to PATH format
+p=${p:1}                        # remove leading :
+PATH=$PATH:$p
+
+# awscli exports
+export AWS_DEFAULT_REGION="ap-southeast-2"
+
+# go exports
+export GOPATH="$root/go"
+export CDPATH="$GOPATH/src"
+export GOPRIVATE="*"
+
+# add custom commands to awscli
+aws() {
+    case $* in
+        # shortcut to get info about authed AWS account
+        auth) command aws sts get-caller-identity ;;
+        # shortcut to get arn of authed AWS account
+        who) command aws sts get-caller-identity --query "Arn" --output text ;;
+        # shortcut to log into ecr for authed AWS account
+        ecr) command aws ecr get-login --no-include-email --region "$AWS_DEFAULT_REGION" ;;
+        # run "default" command
+        *) command aws "$@" ;;
+    esac
+}
+
+# add custom commands to git
+git() {
+    case $* in
+        # remove all uncommitted files
+        clear) command git clean -d -f ;;
+        # or just run the default command
+        *) command git "$@" ;;
+    esac
+}
+
+# add custom commands to docker
+docker() {
+    case $* in
+        # shortcut to force remove all containers + images
+        clear) command docker rm -f "$(docker ps -q)" ; docker rmi -f "$(docker images -q)" ;;
+        # run "default" command
+        *) command docker "$@" ;;
+    esac
+}
