@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# generic envvironment config
+# generic environment config
 
 # aliases
 alias zsrc="source \$HOME/.zshrc"       # shortcut to source .zshrc

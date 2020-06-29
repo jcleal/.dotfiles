@@ -1,14 +1,14 @@
 #!/usr/bin/env zsh
 
 # ___ __    _  __
-#  _/(_ |_||_)/  
+#  _/(_ |_||_)/
 # /____)| || \\__
 #
 # (logo generated from: http://patorjk.com/software/taag/#p=display&h=0&f=Bigfig&t=ZSHRC)
 #
 #
-# please note: 
-# - be careful of variables / funcs here, 
+# please note:
+# - be careful of variables / funcs here,
 #   as they'll be exposed to each session.
 
 # funcs
@@ -47,5 +47,9 @@ setopt hist_ignore_space
 # import generic environment config
 import "$HOME/.dotfiles/zsh/env"
 
+# is there a local config specific to this machine found?
+[[ -f "$HOME/.local/config" ]] && { import "$HOME/.local/config"; }
+
 # is this a work machine? import work environment config
-[[ -n $WORK ]] && { import "$HOME/.dotfiles/zsh/env.work"; }
+[[ -n "$WORK" ]] && { import "$HOME/.dotfiles/zsh/env.work"; }
+
